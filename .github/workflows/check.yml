@@ -2,14 +2,21 @@ name: Dis Randevu Takip
 
 on:
   schedule:
-    - cron: "*/25 * * * *"  # 25 dakikada bir
+    - cron: "*/25 * * * *"
   workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache state
+        uses: actions/cache@v3
+        with:
+          path: last_state.txt
+          key: randevu-state
 
       - name: Python kurulumu
         uses: actions/setup-python@v4
