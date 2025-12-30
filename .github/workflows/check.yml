@@ -1,0 +1,33 @@
+name: Dis Randevu Takip
+
+on:
+  schedule:
+    - cron: "*/25 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache state
+        uses: actions/cache@v3
+        with:
+          path: last_state.txt
+          key: randevu-state
+
+      - name: Python kurulumu
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Paketler
+        run: pip install requests beautifulsoup4
+
+      - name: Kontrol
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python check_randevu.py
